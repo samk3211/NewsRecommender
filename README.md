@@ -1,4 +1,6 @@
-﻿### Installation and running instructions:
+![Alt text](./static/screenshot.png)
+
+### Installation and running instructions:
 1. Run: ´pip install -r requirements´.
 2. Run: ´python -m spacy download en_core_web_md-2.0.0 --direct´.
 3. Download: https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz
@@ -7,4 +9,4 @@
 6. For training, copy data from logs to training directory. Run and see jupyter notebooks.
 
 ### Application architecture:
-![Alt text](https://raw.githubusercontent.com/sakhal/News-Recommender/static/arch.png)# News-Recommender
+![Alt text](./static/arch.png)
