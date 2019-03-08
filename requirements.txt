@@ -1,0 +1,11 @@
+Flask==1.0.2
+Flask-RESTful==0.3.7
+gensim==3.7.1
+joblib==0.13.2
+newsapi-python==0.2.3
+numpy==1.16.1
+pandas==0.24.1
+pyLDAvis==2.1.2
+scikit-learn==0.20.2
+spacy==2.0.18
+textacy==0.6.2

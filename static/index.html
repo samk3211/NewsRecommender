@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html><!--Most of the UI is based on https://codepen.io/apb305/pen/RqbmGe by Anthony Bernard-->
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+        <style>
+                body {
+                    background-color: #f2f2f2;
+                }
+                .card {
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                    color: #303030;
+                }
+                @media screen and (min-width: 1024px) {
+                    .card-deck:hover {
+                        -webkit-transform: scale(1.1);
+                        -ms-transform: scale(1.1);
+                        transform: scale(1.1);
+                    }
+                }
+        </style>
+    </head>
+    <body>
+        <div id="news" class="text-center"></div>
+        <div class="container mt-3">
+            <p class="text-center">
+                Powered by: <a href="https://newsapi.org/docs/get-started" target="_blank">News API</a>,
+                <a href="https://chartbeat-labs.github.io/textacy/" target="_blank">Textacy</a>,
+                <a href="https://spacy.io/usage/" target="_blank">spaCy</a>,
+                <a href="https://github.com/mmihaltz/word2vec-GoogleNews-vectors" target="_blank">word2vec</a> and
+                <a href="https://scikit-learn.org/stable/user_guide.html" target="_blank">Scikit-Learn</a>.
+
+                Design by: <a href="https://codepen.io/apb305/">Anthony Bernard</a>
+            </p>
+        </div>
+        <script>
+            function post(url = ``, data = {}) {                       // Default options are marked with *
+                return fetch(url, {
+                    method: "POST",                                    // *GET, POST, PUT, DELETE, etc.
+                    mode: "cors",                                      // no-cors, cors, *same-origin
+                    cache: "no-cache",                                 // *default, no-cache, reload, force-cache, only-if-cached
+                    credentials: "same-origin",                        // include, *same-origin, omit
+                    headers: { "Content-Type": "application/json" },
+                    redirect: "follow",                                // manual, *follow, error
+                    referrer: "no-referrer",                           // no-referrer, *client
+                    body: JSON.stringify(data),                        // body data type must match "Content-Type" header
+                })
+                .then(response => response.json());                    // parses response to JSON
+            }
+
+            function feedback(a, u) {
+                t = (new Date()).toISOString();
+                console.log(t + " " + a + " " + u);
+                post(`/feedback`, {time:t, action:a, url:u})
+                .then(data => console.log(JSON.stringify(data)))
+                .catch(error => console.error(error));
+                return true;
+            }
+
+            const news = document.getElementById("news");
+            fetch("/feed")
+            .then(resp => resp.json())
+            .catch(error => console.log(error))
+            .then(function(data) {
+                console.log(data);
+                data.articles.forEach(element => {
+                    feedback("view", element.url);
+                    news.innerHTML += `<a href="${element.url}" target="_blank" style="text-decoration: none" 
+                        onClick="feedback('click', '${element.url}');">
+                        <div class="card-deck d-inline-block p-3">
+                        <div class="card mt-3 rounded-2" style="max-width: 18rem">
+                        <img class="card-img-top rounded-2" src="${element.urlToImage
+                        }" style="height: 12rem" alt="Headline News Photo">
+                        <div class="card-body">
+                            <h5 class="card-title">${element.title}</h5><hr>
+                            <p class="card-text">${element.description}</p>
+                            <footer class="blockquote-footer">${element.source.name}<br\>score: ${element.score.toFixed(2)}</footer>
+                        </div>
+                        </div>
+                        </div>
+                        </a>`;
+                });
+            });
+        </script>
+    </body>
+</html>
